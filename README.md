@@ -184,4 +184,4 @@ You can change these values to fit your deployment (e.g., set a different port o
 
 ## License
 
-MIT
+[MIT](./LICENSE)
