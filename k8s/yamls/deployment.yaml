@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: address-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: address-api
+  template:
+    metadata:
+      labels:
+        app: address-api
+    spec:
+      containers:
+        - name: address-api
+          image: brakmic/address-api:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "3000"
+            - name: LIBPOSTAL_DATA_DIR
+              value: "/usr/local/share/libpostal"
+            - name: API_BASE_URL
+              value: "http://address-api:3000"
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"

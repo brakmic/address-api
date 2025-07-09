@@ -1,0 +1,33 @@
+replicaCount: 2
+
+image:
+  repository: brakmic/address-api
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: address-api.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+env:
+  NODE_ENV: production
+  PORT: "3000"
+  LIBPOSTAL_DATA_DIR: /usr/local/share/libpostal
+  API_BASE_URL: http://address-api:3000

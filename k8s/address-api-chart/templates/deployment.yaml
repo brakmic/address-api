@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "address-api.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "address-api.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "address-api.fullname" . }}
+    spec:
+      containers:
+        - name: address-api
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          env:
+            - name: NODE_ENV
+              value: {{ .Values.env.NODE_ENV | quote }}
+            - name: PORT
+              value: {{ .Values.env.PORT | quote }}
+            - name: LIBPOSTAL_DATA_DIR
+              value: {{ .Values.env.LIBPOSTAL_DATA_DIR | quote }}
+            - name: API_BASE_URL
+              value: {{ .Values.env.API_BASE_URL | quote }}
+          resources:
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+              cpu: {{ .Values.resources.limits.cpu }}

@@ -1,0 +1,92 @@
+openapi: 3.0.3
+info:
+  title: Address API
+  version: 1.0.0
+  description: RESTful API for address parsing and normalization using libpostal
+servers:
+  - url: http://localhost:3000
+paths:
+  /address/parse:
+    post:
+      summary: Parse an address into components
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParseAddressRequest'
+      responses:
+        '200':
+          description: Parsed address components
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParseAddressResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /address/normalize:
+    post:
+      summary: Normalize an address string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NormalizeAddressRequest'
+      responses:
+        '200':
+          description: Normalized address
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NormalizeAddressResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ParseAddressRequest:
+      type: object
+      required:
+        - address
+      properties:
+        address:
+          type: string
+    ParseAddressResponse:
+      type: object
+      properties:
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressComponent'
+    AddressComponent:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: string
+    NormalizeAddressRequest:
+      type: object
+      required:
+        - address
+      properties:
+        address:
+          type: string
+    NormalizeAddressResponse:
+      type: object
+      properties:
+        normalized:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
